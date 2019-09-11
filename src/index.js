@@ -4,13 +4,14 @@ import './index.css';
 import { App } from './components/App';
 import { createStore } from 'redux';
 import rootReducer from './reducers';
+import { Provider } from 'react-redux';
 
 const store = createStore(rootReducer);
 
 const App = () => (
-  <div>
-    <Counter/>
-  </div>
+  <Provider store={store} >
+    <App />
+  </Provider>
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));
