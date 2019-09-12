@@ -3,6 +3,7 @@ import * as Stack from '../utilities/stack';
 import { executeCurrent } from './instructions';
 
 const initialState = {
+  editorFocus: { x: 0, y: 0},
   position: { x: 0, y: 0},
   // type heading = 'north' | 'east' | 'south' | 'west'
   heading: 'east',
@@ -14,7 +15,7 @@ const initialState = {
   stack: Stack.empty,
   // skip intermediate
   activeBridge: false,
-  execution_complete: false,
+  executionComplete: false,
 }
 
 export default (state = initialState, action) => {
@@ -23,6 +24,12 @@ export default (state = initialState, action) => {
     case "SET_GRID_DIMENSIONS": {
       const { height, width } = action;
       return R.mergeRight(state, { dimensions: { height, width }})
+    }
+    case "EDIT_CELL": {
+      return R.mergeDeepRight(state, { grid: { [action.cellId]: action.instruction }});
+    }
+    case "SET_EDITOR_FOCUS": {
+      return R.mergeRight(state, { editorFocus: { x: action.x, y: action.y}});
     }
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;
@@ -41,9 +48,6 @@ export default (state = initialState, action) => {
     }
     case "EXECUTE_CURRENT_INSTRUCTION": {
       return executeCurrent(state);
-    }
-    case "EDIT_CELL": {
-      return R.mergeDeepRight(state, { grid: { [action.cellId]: action.instruction }});
     }
     default:
       return state;
