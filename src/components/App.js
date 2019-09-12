@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import { Grid } from './Grid';
+import Grid from './Grid';
 
-export const App = () => {
+export default () => {
   return (
     <div className="app">
       <header className="header">Welcome to Sudoku!</header>

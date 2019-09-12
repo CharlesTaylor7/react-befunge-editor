@@ -1,17 +1,15 @@
 .cell {
   border: 1px solid white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
 }
 
 .input {
-  width: 14px;
+  width: 100%;
   background: none;
   border: none;
   outline: none;
   color: white;
-  font-size: 18pt;
+  font-size: 20pt;
+  text-align: center;
 }
 
 .number-input:invalid {

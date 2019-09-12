@@ -2,12 +2,12 @@
 class Empty {}
 
 export const empty = new Empty();
-export const cons = (head, tail) => { head, tail };
+export const push = (head, tail) => ({ head, tail });
 export const isEmpty = (stack) => stack instanceof Empty;
 
 export const pop = (stack, num) => {
   const result = [];
-  for (i = 0; i< num; i++){
+  for (let i = 0; i < num; i++){
     result.push(stack.head);
     stack = stack.tail;
     if (stack === undefined) {

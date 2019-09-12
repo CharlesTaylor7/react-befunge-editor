@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import "./Grid.css"
-import { Cell } from "./Cell"
+import Cell from "./Cell"
 
-export const Grid = () => {
+export default () => {
   return (
     <div className="grid">
       {Array(81)

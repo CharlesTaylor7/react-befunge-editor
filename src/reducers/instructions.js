@@ -6,7 +6,7 @@ export const executeCurrent = (state) => {
   const number = Number(instruction);
 
   if (Number.isInteger(number)) {
-    return R.mergeRight(state, { stack: Stack.cons(number, state.stack) });
+    return R.mergeRight(state, { stack: Stack.push(number, state.stack) });
   }
 
   switch (instruction) {
@@ -29,5 +29,5 @@ export const executeCurrent = (state) => {
 const runBinaryOpOnStack = (op, state) => {
   const [ a, b, rest ] = Stack.pop(state.stack, 2);
   const combined = op(a, b);
-  return R.mergeRight(state, { stack: Stack.cons(combined, rest) });
+  return R.mergeRight(state, { stack: Stack.push(combined, rest) });
 }

@@ -13,7 +13,7 @@ const initialState = {
   // stack<int>
   stack: Stack.empty,
   // skip intermediate
-  bridge: false,
+  activeBridge: false,
   execution_complete: false,
 }
 
@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
       return R.mergeRight(state, { dimensions: { height, width }})
     }
     case "ADVANCE": {
-      const jumpSize = bridge ? 2 : 1;
+      const jumpSize = state.activeBridge ? 2 : 1;
       const alteration = () => {
         const { x, y} = state.position;
         switch (state.heading) {
@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
            throw new Error("Unrecognized heading!");
         }
       };
-      return R.mergeDeepRight(state, { position: alteration(), bridge: false});
+      return R.mergeDeepRight(state, { position: alteration(), activeBridge: false});
     }
     case "EXECUTE_CURRENT_INSTRUCTION": {
       return executeCurrent(state);
