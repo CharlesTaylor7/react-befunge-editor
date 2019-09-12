@@ -10,11 +10,7 @@ const Cell = ({ x, y, value, inFocus, gridDimensions, dispatch }) => {
   }, [inFocus]);
 
   const editCell = value => {
-    dispatch({
-      type: "EDIT_CELL",
-      instruction: value,
-      cellId: `${x}-${y}`,
-    });
+    dispatch({ type: "EDIT_CELL", x, y, value });
     if (value === '') return;
 
     const { width, height } = gridDimensions;
@@ -24,13 +20,31 @@ const Cell = ({ x, y, value, inFocus, gridDimensions, dispatch }) => {
       type: "SET_EDITOR_FOCUS",
       x: nextX,
       y: nextY,
-    })
+    });
+  }
+
+  const onKeyDown = key => {
+    switch (key) {
+      case "ArrowRight":
+        dispatch({ type: "SET_EDITOR_FOCUS", x: x + 1, y});
+        break;
+      case "ArrowLeft":
+        dispatch({ type: "SET_EDITOR_FOCUS", x: x - 1, y});
+        break;
+      case "ArrowUp":
+        dispatch({ type: "SET_EDITOR_FOCUS", x, y: y - 1});
+        break;
+      case "ArrowDown":
+        dispatch({ type: "SET_EDITOR_FOCUS", x, y: y + 1});
+        break;
+    }
   }
 
   return (
     <div
       className="cell"
       onClick={() => dispatch({type: "SET_EDITOR_FOCUS", x, y})}
+      onKeyDown={e => onKeyDown(e.key)}
     >
       <input
         className="input"

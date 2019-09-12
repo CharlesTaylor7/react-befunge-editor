@@ -26,9 +26,17 @@ export default (state = initialState, action) => {
       return R.mergeRight(state, { dimensions: { height, width }})
     }
     case "EDIT_CELL": {
-      return R.mergeDeepRight(state, { grid: { [action.cellId]: action.instruction }});
+      const { x, y, value} = action;
+      const cellId = `${x}-${y}`;
+      return R.mergeDeepRight(state, { grid: { [cellId]: value }});
     }
     case "SET_EDITOR_FOCUS": {
+      if (
+        action.x < 0 || action.x >= state.dimensions.width ||
+        action.y < 0 || action.y >= state.dimensions.height) {
+
+        return state;
+      }
       return R.mergeRight(state, { editorFocus: { x: action.x, y: action.y}});
     }
     case "ADVANCE": {
