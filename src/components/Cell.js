@@ -2,13 +2,19 @@ import React, { useRef, useState, useEffect } from "react"
 import "./Cell.css"
 import { connect } from "react-redux"
 
-const Cell = ({ cellId, value, dispatch }) => {
+const Cell = ({ x, y, value, dispatch }) => {
   const inputElement = useRef(null);
   const [isEditting, setIsEditting] = useState(false);
 
   useEffect(() => {
     if (isEditting) inputElement.current.focus();
-  }, [isEditting])
+  }, [isEditting]);
+
+  const setValue = value => dispatch({
+    type: "EDIT_CELL",
+    instruction: value,
+    cellId: `${x}-${y}`
+  });
 
   return (
     <div
@@ -21,14 +27,14 @@ const Cell = ({ cellId, value, dispatch }) => {
         maxLength="1"
         ref={inputElement}
         value={value}
-        onChange={e => dispatch({ type: "EDIT_CELL", instruction: e.target.value, cellId })}
+        onChange={e => setValue(e.target.value)}
       />
     </div>
   )
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  value: state.grid[ownProps.cellId]
+  value: state.grid[ownProps.id]
 });
 
 export default connect(mapStateToProps)(Cell);

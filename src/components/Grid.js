@@ -11,6 +11,8 @@ export default () => {
           return (
             <Cell
               key={`cell-${i}`}
+              y={Math.floor(i / 9)}
+              x={i % 9}
             />
           )
         })
