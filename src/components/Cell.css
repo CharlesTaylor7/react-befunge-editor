@@ -15,6 +15,10 @@
   text-align: center;
 }
 
+.highlighted.cell {
+  border: 2px solid yellow;
+}
+
 .number-input:invalid {
   color: red;
 }

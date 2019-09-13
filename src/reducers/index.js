@@ -3,8 +3,8 @@ import * as Stack from '../utilities/stack';
 import { executeCurrent } from './instructions';
 
 const initialState = {
-  editorFocus: { x: 0, y: 0},
-  position: { x: 0, y: 0},
+  editorFocus: { x: 0, y: 0 },
+  currentInstruction: { x: 0, y: 0 },
   // type heading = 'north' | 'east' | 'south' | 'west'
   heading: 'east',
   // grid: { [cellId: string]: instruction }
@@ -42,7 +42,7 @@ export default (state = initialState, action) => {
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;
       const alteration = () => {
-        const { x, y} = state.position;
+        const { x, y} = state.currentInstruction;
         switch (state.heading) {
           case 'north': return { y: y + jumpSize};
           case 'east': return { x: x + jumpSize};
@@ -52,7 +52,7 @@ export default (state = initialState, action) => {
            throw new Error("Unrecognized heading!");
         }
       };
-      return R.mergeDeepRight(state, { position: alteration(), activeBridge: false});
+      return R.mergeDeepRight(state, { currentInstruction: alteration(), activeBridge: false});
     }
     case "EXECUTE_CURRENT_INSTRUCTION": {
       return executeCurrent(state);

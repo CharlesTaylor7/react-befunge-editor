@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from "react"
 import "./Cell.css"
 import { connect } from "react-redux"
+import * as R from 'ramda'
 
-const Cell = ({ x, y, value, inFocus, gridDimensions, dispatch }) => {
+const Cell = ({ x, y, value, inFocus, isCurrentInstruction, gridDimensions, dispatch }) => {
   const inputElement = useRef(null);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const Cell = ({ x, y, value, inFocus, gridDimensions, dispatch }) => {
   }
 
   const onKeyDown = key => {
+    console.log("Key down: " + key);
     switch (key) {
       case "ArrowRight":
         dispatch({ type: "SET_EDITOR_FOCUS", x: x + 1, y});
@@ -37,12 +39,17 @@ const Cell = ({ x, y, value, inFocus, gridDimensions, dispatch }) => {
       case "ArrowDown":
         dispatch({ type: "SET_EDITOR_FOCUS", x, y: y + 1});
         break;
+      case "Backspace":
+        if (value === undefined || value === null || value === '') {
+          dispatch({ type: "SET_EDITOR_FOCUS", x: x-1, y});
+        }
+        break;
     }
   }
 
   return (
     <div
-      className="cell"
+      className={isCurrentInstruction ? 'highlighted cell': 'cell'}
       onClick={() => dispatch({type: "SET_EDITOR_FOCUS", x, y})}
       onKeyDown={e => onKeyDown(e.key)}
     >
@@ -58,11 +65,14 @@ const Cell = ({ x, y, value, inFocus, gridDimensions, dispatch }) => {
   )
 }
 
+const samePosition = ({x: x1, y: y1}, {x: x2, y: y2}) =>
+  x1 === x2 &&
+  y1 === y2;
+
 const mapStateToProps = (state, ownProps) => ({
   value: state.grid[ownProps.id],
-  inFocus:
-    ownProps.x === state.editorFocus.x &&
-    ownProps.y === state.editorFocus.y,
+  inFocus: R.equals({x: ownProps.x, y: ownProps.y}, state.editorFocus),
+  isCurrentInstruction: R.equals({x: ownProps.x, y: ownProps.y}, state.currentInstruction),
   gridDimensions: state.dimensions,
 });
 
