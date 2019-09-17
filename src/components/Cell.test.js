@@ -40,6 +40,6 @@ describe('cell', () => {
     const input2 = getByTestId('cell-input-1-0');
     expect(input1.value).toBe('$');
     expect(input2).toEqual(document.activeElement);
-    expect(store.editorFocus).toBe({ x: 1, y: 0});
+    expect(store.getState().editorFocus).toEqual({ x: 1, y: 0});
   });
 })
