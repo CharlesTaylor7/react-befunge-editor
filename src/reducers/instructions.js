@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import * as Stack from '../utilities/stack';
+import Stack from '../utilities/stack';
 
 export const executeCurrent = (state) => {
   const instruction = state.grid[`${state.position.x}-${state.position.y}`];
