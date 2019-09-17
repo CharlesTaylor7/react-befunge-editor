@@ -2,9 +2,9 @@ import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { render as rtlRender } from '@testing-library/react'
-import rootReducer from '../reducers'
+import rootReducer from '../store/reducers'
 import * as R from 'ramda'
-import defaultState from '../reducers/initialState'
+import defaultState from '../store'
 
 // From https://github.com/kentcdodds/react-testing-library-course/blob/master/src/__tests__/redux-03.js:
 export default (

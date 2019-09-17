@@ -1,8 +1,8 @@
 import * as R from 'ramda'
-import * as Stack from '../utilities/stack';
+import * as Stack from '../../utilities/stack';
 import { executeCurrent } from './instructions';
-import move from '../utilities/move';
-import initialState from './initialState';
+import move from '../../utilities/move';
+import initialState from '..';
 
 export default (state = initialState, action) => {
 
