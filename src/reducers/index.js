@@ -3,9 +3,6 @@ import * as Stack from '../utilities/stack';
 import { executeCurrent } from './instructions';
 import move from '../utilities/move';
 
-const xLens = R.lensProp('x');
-const yLens = R.lensProp('y');
-
 const initialState = {
   editorFocus: { x: 0, y: 0 },
   currentInstruction: { x: 0, y: 0 },
@@ -35,13 +32,11 @@ export default (state = initialState, action) => {
       return R.mergeDeepRight(state, { grid: { [cellId]: value }});
     }
     case "SET_EDITOR_FOCUS": {
-      if (
-        action.x < 0 || action.x >= state.dimensions.width ||
-        action.y < 0 || action.y >= state.dimensions.height) {
-
-        return state;
-      }
-      return R.mergeRight(state, { editorFocus: action.position });
+      const { x, y } = action.position;
+      const { dimensions: { width, height }} = state;
+      return (x >= 0 && x < width && y >= 0 && y < height)
+        ? R.mergeRight(state, { editorFocus: action.position })
+        : state;
     }
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;
