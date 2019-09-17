@@ -2,22 +2,7 @@ import * as R from 'ramda'
 import * as Stack from '../utilities/stack';
 import { executeCurrent } from './instructions';
 import move from '../utilities/move';
-
-const initialState = {
-  editorFocus: { x: 0, y: 0 },
-  currentInstruction: { x: 0, y: 0 },
-  // type heading = 'Up' | 'Right' | 'Down' | 'Left'
-  heading: 'Right',
-  // grid: { [cellId: string]: instruction }
-  // where cell ids are of the form "{i}-{j}"
-  grid: {},
-  dimensions: { height: 0, width: 0},
-  // stack<int>
-  stack: Stack.empty,
-  // skip intermediate
-  activeBridge: false,
-  executionComplete: false,
-}
+import initialState from './initialState';
 
 export default (state = initialState, action) => {
 
@@ -34,9 +19,11 @@ export default (state = initialState, action) => {
     case "SET_EDITOR_FOCUS": {
       const { x, y } = action.position;
       const { dimensions: { width, height }} = state;
-      return (x >= 0 && x < width && y >= 0 && y < height)
-        ? R.mergeRight(state, { editorFocus: action.position })
-        : state;
+
+      if (x >= 0 && x < width && y >= 0 && y < height) {
+        return R.mergeRight(state, { editorFocus: action.position });
+      }
+      return state;
     }
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;

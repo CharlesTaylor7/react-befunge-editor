@@ -14,7 +14,7 @@ describe('cell', () => {
         <Cell position={{x: 0, y: 0}} />
         <Cell position={{x: 1, y: 0}} />
       </div>,
-      { dimensions: { width: 2, height: 1 }}
+      { initialState: { dimensions: { width: 2, height: 1 }}}
     );
 
     const cellDiv = getByTestId('cell-div-1-0');
@@ -24,14 +24,14 @@ describe('cell', () => {
     expect(cellInput).toBe(document.activeElement);
   })
 
-  xit('advances focus to the next position after receiving input', () => {
+  it('advances focus to the next position after receiving input', () => {
 
     const { getByTestId, store } = render(
       <div>
         <Cell position={{x: 0, y: 0}} />
         <Cell position={{x: 1, y: 0}} />
       </div>,
-      { dimensions: { width: 2, height: 1 }}
+      { initialState: { dimensions: { width: 2, height: 1 }}}
     );
 
     const input1 = getByTestId('cell-input-0-0');
