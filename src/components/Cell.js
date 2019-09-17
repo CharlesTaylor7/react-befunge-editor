@@ -41,13 +41,13 @@ const Cell = ({ position, value, inFocus, isCurrentInstruction, gridDimensions, 
 
   return (
     <div
-      data-testid="cell-div"
+      data-testid={`cell-div-${x}-${y}`}
       className={isCurrentInstruction ? 'highlighted cell': 'cell'}
       onClick={() => dispatch({type: 'SET_EDITOR_FOCUS', position})}
       onKeyDown={e => onKeyDown(e.key)}
     >
       <input
-        data-testid="cell-input"
+        data-testid={`cell-input-${x}-${y}`}
         className="input"
         type="text"
         maxLength="1"
