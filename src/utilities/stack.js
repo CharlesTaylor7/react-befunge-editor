@@ -1,11 +1,12 @@
+import * as R from 'ramda'
 
 class Empty {}
 
 export default {
   empty: new Empty(),
   isEmpty: stack => stack instanceof Empty,
-  push: (head, tail) => ({ head, tail }),
-  pop: (stack, num) => {
+  push: R.curry((head, tail) => ({ head, tail })),
+  pop: R.curry((stack, num) => {
     const result = [];
     for (let i = 0; i < num; i++){
       result.push(stack.head);
@@ -16,5 +17,5 @@ export default {
     }
     result.push(stack);
     return result;
-  }
+  })
 }

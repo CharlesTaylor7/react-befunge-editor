@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
     }
     case "EDIT_CELL": {
       const { position, value} = action;
-      return R.set(gridLens(position), value);
+      return R.set(gridLens(position), value, state);
     }
     case "SET_EDITOR_FOCUS": {
       const { x, y } = action.position;

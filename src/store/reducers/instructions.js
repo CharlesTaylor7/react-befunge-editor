@@ -7,7 +7,7 @@ export const executeCurrent = (state) => {
   const number = Number(instruction);
 
   if (Number.isInteger(number)) {
-    return R.mergeRight(state, { stack: Stack.push(number, state.stack) });
+    return R.over(R.lensProp('stack'), Stack.push(number), state);
   }
 
   switch (instruction) {
@@ -15,20 +15,21 @@ export const executeCurrent = (state) => {
     case undefined:
       return state;
     case '+':
-      return runBinaryOpOnStack((a, b) => a + b);
+      return runBinaryOpOnStack((a, b) => a + b)(state);
     case '-':
-      return runBinaryOpOnStack((a, b) => a - b);
+      return runBinaryOpOnStack((a, b) => a - b)(state);
     case '*':
-      return runBinaryOpOnStack((a, b) => a * b);
+      return runBinaryOpOnStack((a, b) => a * b)(state);
     case '/':
-      return runBinaryOpOnStack((a, b) => a / b);
+      return runBinaryOpOnStack((a, b) => a / b)(state);
     default:
-        console.error(`Unable to interpret unknown instruction: ${instruction}`);
+      return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
 }
 
-const runBinaryOpOnStack = (op, state) => {
-  const [ a, b, rest ] = Stack.pop(state.stack, 2);
-  const combined = op(a, b);
-  return R.mergeRight(state, { stack: Stack.push(combined, rest) });
-}
+const runBinaryOpOnStack = (op) =>
+  R.over(R.lensProp('stack'), stack => {
+    const [ a, b, rest ] = Stack.pop(stack, 2);
+    const head = op(a, b);
+    return Stack.push(head, rest);
+  });
