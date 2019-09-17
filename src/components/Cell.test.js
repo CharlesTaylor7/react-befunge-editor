@@ -42,4 +42,28 @@ describe('cell', () => {
     expect(input2).toEqual(document.activeElement);
     expect(store.getState().editorFocus).toEqual({ x: 1, y: 0});
   });
+
+  it('moves focus backwards when backspacing input', () => {
+
+    const { getByTestId, store } = render(
+      <div>
+        <Cell position={{x: 0, y: 0}} />
+        <Cell position={{x: 1, y: 0}} />
+      </div>,
+      {
+        initialState: {
+          dimensions: { width: 2, height: 1 },
+          editorFocus: { x: 1, x: 0 },
+          grid: { ['1-0']: '$' },
+        }
+      }
+    );
+
+    const cell_1_0 = getByTestId('cell-div-1-0');
+    fireEvent.keyDown(cell_1_0, { key: 'Backspace'});
+
+    expect(getByTestId('cell-input-1-0').value).toBe('');
+    expect(store.getState().editorFocus).toEqual({ x: 0, y: 0});
+    expect(getByTestId('cell-input-0-0')).toBe(document.activeElement);
+  });
 })
