@@ -1,8 +1,8 @@
 import * as R from 'ramda'
-import * as Stack from '../../utilities/stack';
 import { executeCurrent } from './instructions';
 import move from '../../utilities/move';
-import initialState from '..';
+import initialState from '../initialState';
+import { gridLens } from '../lenses';
 
 export default (state = initialState, action) => {
 
@@ -12,9 +12,8 @@ export default (state = initialState, action) => {
       return R.mergeRight(state, { dimensions: { height, width }})
     }
     case "EDIT_CELL": {
-      const { position: { x, y }, value} = action;
-      const cellId = `${x}-${y}`;
-      return R.mergeDeepRight(state, { grid: { [cellId]: value }});
+      const { position, value} = action;
+      return R.set(gridLens(position), value);
     }
     case "SET_EDITOR_FOCUS": {
       const { x, y } = action.position;
@@ -30,7 +29,7 @@ export default (state = initialState, action) => {
       const position = move(state.heading, jumpSize)(state.currentInstruction);
       return R.mergeRight(state, { currentInstruction: position, activeBridge: false});
     }
-    case "EXECUTE_CURRENT_INSTRUCTION": {
+    case "EXECUTE": {
       return executeCurrent(state);
     }
     default:

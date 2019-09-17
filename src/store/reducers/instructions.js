@@ -1,8 +1,9 @@
 import * as R from 'ramda';
 import Stack from '../../utilities/stack';
+import { gridLens } from '../lenses';
 
 export const executeCurrent = (state) => {
-  const instruction = state.grid[`${state.position.x}-${state.position.y}`];
+  const instruction = R.view(gridLens(state.currentInstruction), state);
   const number = Number(instruction);
 
   if (Number.isInteger(number)) {
