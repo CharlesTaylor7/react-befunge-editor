@@ -1,12 +1,16 @@
 import * as R from 'ramda'
 import * as Stack from '../utilities/stack';
 import { executeCurrent } from './instructions';
+import move from '../utilities/move';
+
+const xLens = R.lensProp('x');
+const yLens = R.lensProp('y');
 
 const initialState = {
   editorFocus: { x: 0, y: 0 },
   currentInstruction: { x: 0, y: 0 },
-  // type heading = 'north' | 'east' | 'south' | 'west'
-  heading: 'east',
+  // type heading = 'Up' | 'Right' | 'Down' | 'Left'
+  heading: 'Right',
   // grid: { [cellId: string]: instruction }
   // where cell ids are of the form "{i}-{j}"
   grid: {},
@@ -26,7 +30,7 @@ export default (state = initialState, action) => {
       return R.mergeRight(state, { dimensions: { height, width }})
     }
     case "EDIT_CELL": {
-      const { x, y, value} = action;
+      const { position: { x, y }, value} = action;
       const cellId = `${x}-${y}`;
       return R.mergeDeepRight(state, { grid: { [cellId]: value }});
     }
@@ -37,22 +41,12 @@ export default (state = initialState, action) => {
 
         return state;
       }
-      return R.mergeRight(state, { editorFocus: { x: action.x, y: action.y}});
+      return R.mergeRight(state, { editorFocus: action.position });
     }
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;
-      const alteration = () => {
-        const { x, y} = state.currentInstruction;
-        switch (state.heading) {
-          case 'north': return { y: y + jumpSize};
-          case 'east': return { x: x + jumpSize};
-          case 'south': return { y: y - jumpSize};
-          case 'west': return { x: x - jumpSize};
-          default:
-           throw new Error("Unrecognized heading!");
-        }
-      };
-      return R.mergeDeepRight(state, { currentInstruction: alteration(), activeBridge: false});
+      const position = move(state.heading, jumpSize)(state.currentInstruction);
+      return R.mergeRight(state, { currentInstruction: position, activeBridge: false});
     }
     case "EXECUTE_CURRENT_INSTRUCTION": {
       return executeCurrent(state);

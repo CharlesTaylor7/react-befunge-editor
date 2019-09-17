@@ -18,8 +18,7 @@ const Grid = ({dispatch}) => {
           return (
             <Cell
               key={`cell-${i}`}
-              y={y}
-              x={x}
+              position={{x, y}}
             />
           )
         })

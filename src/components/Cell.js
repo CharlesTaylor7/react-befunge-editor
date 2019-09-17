@@ -1,59 +1,53 @@
-import React, { useRef, useEffect } from "react"
-import "./Cell.css"
-import { connect } from "react-redux"
+import React, { useRef, useEffect } from 'react'
+import './Cell.css'
+import { connect } from 'react-redux'
 import * as R from 'ramda'
+import move from '../utilities/move'
 
-const Cell = ({ x, y, value, inFocus, isCurrentInstruction, gridDimensions, dispatch }) => {
+const Cell = ({ position, value, inFocus, isCurrentInstruction, gridDimensions, dispatch }) => {
   const inputElement = useRef(null);
+  const { x, y } = position;
 
   useEffect(() => {
     if (inFocus) inputElement.current.focus();
   }, [inFocus]);
 
   const editCell = value => {
-    dispatch({ type: "EDIT_CELL", x, y, value });
+    dispatch({ type: 'EDIT_CELL', position, value });
     if (value === '') return;
 
     const { width, height } = gridDimensions;
     const nextX = (x + 1) % width;
     const nextY = nextX === 0 ? (y + 1) % height : y;
     dispatch({
-      type: "SET_EDITOR_FOCUS",
-      x: nextX,
-      y: nextY,
+      type: 'SET_EDITOR_FOCUS',
+      position: { x: nextX, y: nextY },
     });
   }
 
   const onKeyDown = key => {
-    console.log("Key down: " + key);
-    switch (key) {
-      case "ArrowRight":
-        dispatch({ type: "SET_EDITOR_FOCUS", x: x + 1, y});
-        break;
-      case "ArrowLeft":
-        dispatch({ type: "SET_EDITOR_FOCUS", x: x - 1, y});
-        break;
-      case "ArrowUp":
-        dispatch({ type: "SET_EDITOR_FOCUS", x, y: y - 1});
-        break;
-      case "ArrowDown":
-        dispatch({ type: "SET_EDITOR_FOCUS", x, y: y + 1});
-        break;
-      case "Backspace":
-        if (value === undefined || value === null || value === '') {
-          dispatch({ type: "SET_EDITOR_FOCUS", x: x-1, y});
-        }
-        break;
+    const direction = R.match(/^Arrow(.*)$/, key)[1];
+    if (direction) {
+      dispatch({ type: 'SET_EDITOR_FOCUS', position: move(direction)(position) })
+    } else if (
+      key === 'Backspace' &&
+      ( value === '' ||
+        value === null ||
+        value === undefined)
+      ) {
+      dispatch({ type: 'SET_EDITOR_FOCUS', position: move('Left')(position)});
     }
   }
 
   return (
     <div
+      data-testid="cell-div"
       className={isCurrentInstruction ? 'highlighted cell': 'cell'}
-      onClick={() => dispatch({type: "SET_EDITOR_FOCUS", x, y})}
+      onClick={() => dispatch({type: 'SET_EDITOR_FOCUS', position})}
       onKeyDown={e => onKeyDown(e.key)}
     >
       <input
+        data-testid="cell-input"
         className="input"
         type="text"
         maxLength="1"
@@ -65,14 +59,10 @@ const Cell = ({ x, y, value, inFocus, isCurrentInstruction, gridDimensions, disp
   )
 }
 
-const samePosition = ({x: x1, y: y1}, {x: x2, y: y2}) =>
-  x1 === x2 &&
-  y1 === y2;
-
 const mapStateToProps = (state, ownProps) => ({
   value: state.grid[ownProps.id],
-  inFocus: R.equals({x: ownProps.x, y: ownProps.y}, state.editorFocus),
-  isCurrentInstruction: R.equals({x: ownProps.x, y: ownProps.y}, state.currentInstruction),
+  inFocus: R.equals(ownProps.position, state.editorFocus),
+  isCurrentInstruction: R.equals(ownProps.position, state.currentInstruction),
   gridDimensions: state.dimensions,
 });
 
