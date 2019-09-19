@@ -81,21 +81,21 @@ export const executeCurrent = (state) => {
         state
       );
     case '.':
-      const { head, tail } = stack;
+      const { head, tail } = state.stack;
       return R.mergeRight(
         state,
         {
           stack: tail,
-          console: stack.console + head + ' ',
+          console: state.console + head + ' ',
         }
       );
     case ',':
-      const { head, tail } = stack;
+      const { head, tail } = state.stack;
       return R.mergeRight(
         state,
         {
           stack: tail,
-          console: stack.console + String.fromCharCode(head),
+          console: state.console + String.fromCharCode(head),
         }
       );
     case '#':
@@ -104,6 +104,22 @@ export const executeCurrent = (state) => {
         true,
         state
       );
+    case 'g':
+      return R.over(
+        R.lensProp('stack'),
+        stack => {
+          const [ y, x, rest ] = Stack.pop(2, stack);
+          const value = R.view(gridLens(x, y), state);
+          return Stack.push(value.charCodeAt(0), rest);
+        },
+        state
+      );
+    case 'p':
+      const [ y, x, value, rest ] = Stack.pop(3, state.stack);
+      return R.pipe(
+        R.set(gridLens(x, y), String.fromCharCode(value)),
+        R.set(R.lensProp('stack'), rest)
+      )(state);
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
   }
