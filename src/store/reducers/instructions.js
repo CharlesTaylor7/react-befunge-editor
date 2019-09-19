@@ -29,7 +29,7 @@ export const executeCurrent = (state) => {
 
 const runBinaryOpOnStack = (op) =>
   R.over(R.lensProp('stack'), stack => {
-    const [ a, b, rest ] = Stack.pop(stack, 2);
+    const [ a, b, rest ] = Stack.pop(2, stack);
     const head = op(a, b);
     return Stack.push(head, rest);
   });
