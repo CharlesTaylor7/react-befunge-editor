@@ -18,9 +18,6 @@ export const executeCurrent = (state) => {
   }
 
   switch (instruction) {
-    case ' ':
-    case undefined:
-      return state;
     case '+':
       return runBinaryOpOnStack((a, b) => a + b)(state);
     case '-':
@@ -120,6 +117,11 @@ export const executeCurrent = (state) => {
         R.set(gridLens(x, y), String.fromCharCode(value)),
         R.set(R.lensProp('stack'), rest)
       )(state);
+    case '@':
+      return R.set(R.lensProp('executionComplete'), true, state);
+    case ' ':
+    case undefined:
+      return state;
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
   }
