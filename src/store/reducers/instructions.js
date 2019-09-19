@@ -17,11 +17,13 @@ export const executeCurrent = (state) => {
     case '+':
       return runBinaryOpOnStack((a, b) => a + b)(state);
     case '-':
-      return runBinaryOpOnStack((a, b) => a - b)(state);
+      return runBinaryOpOnStack((a, b) => b - a)(state);
     case '*':
       return runBinaryOpOnStack((a, b) => a * b)(state);
     case '/':
-      return runBinaryOpOnStack((a, b) => a / b)(state);
+      return runBinaryOpOnStack((a, b) => Math.floor(b / a))(state);
+    case '%':
+      return runBinaryOpOnStack((a, b) => a % b)(state);
     default:
       return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }

@@ -32,11 +32,13 @@ const push = R.curry((head, tail) => new Stack(head, tail));
 
 const pop = R.curry((num, stack) => {
   const result = [];
-  for (let i = 0; i < num; i++){
-    result.push(stack.head);
-    stack = stack.tail;
-    if (stack === undefined) {
-      throw new Error(`Cannot pop ${num} elements!`)
+  for (let i = 0; i < num; i++) {
+    if (isEmpty(stack)) {
+      result.push(0);
+    }
+    else {
+      result.push(stack.head);
+      stack = stack.tail;
     }
   }
   result.push(stack);

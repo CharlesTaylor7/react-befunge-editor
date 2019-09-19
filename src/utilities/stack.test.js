@@ -56,9 +56,9 @@ describe('Stack', () => {
       expect(Stack.pop(0, stack))
         .toEqual([stack])
     })
-    test('cannot pop more than the depth of the stack', () => {
-      expect(() => Stack.pop(2, Stack.fromArray(['a'])))
-        .toThrow()
+    test('popping more than stack depth yields 0 as placeholder', () => {
+      expect(Stack.pop(2, Stack.fromArray(['a'])))
+        .toEqual(['a', 0, Stack.empty])
     })
   })
   describe('is iterable', () => {
