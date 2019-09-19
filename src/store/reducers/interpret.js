@@ -4,7 +4,7 @@ import * as Random from '../../utilities/random'
 import { gridLens } from '../lenses'
 import { quot, rem } from '../../utilities/integerDivision'
 
-export const executeCurrent = (state) => {
+export default (state) => {
   const instruction = R.view(gridLens(state.currentInstruction), state);
 
   if (state.stringMode && instruction !== '\"') {

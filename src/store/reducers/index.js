@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { executeCurrent } from './instructions';
+import interpret from './interpret';
 import move from '../../utilities/move';
 import initialState from '../initialState';
 import { gridLens } from '../lenses';
@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
       return R.mergeRight(state, { currentInstruction: position, activeBridge: false});
     }
     case "EXECUTE": {
-      return executeCurrent(state);
+      return interpret(state);
     }
     default:
       return state;
