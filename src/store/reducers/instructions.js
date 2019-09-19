@@ -1,6 +1,7 @@
-import * as R from 'ramda';
-import Stack from '../../utilities/stack';
-import { gridLens } from '../lenses';
+import * as R from 'ramda'
+import Stack from '../../utilities/stack'
+import { gridLens } from '../lenses'
+import { rem, div } from '../../utilities/integerDivision'
 
 export const executeCurrent = (state) => {
   const instruction = R.view(gridLens(state.currentInstruction), state);
@@ -21,9 +22,9 @@ export const executeCurrent = (state) => {
     case '*':
       return runBinaryOpOnStack((a, b) => a * b)(state);
     case '/':
-      return runBinaryOpOnStack((a, b) => Math.floor(b / a))(state);
+      return runBinaryOpOnStack((a, b) => div(b, a))(state);
     case '%':
-      return runBinaryOpOnStack((a, b) => a % b)(state);
+      return runBinaryOpOnStack((a, b) => rem(b, a))(state);
     default:
       return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
