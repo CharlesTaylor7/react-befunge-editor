@@ -1,6 +1,15 @@
 import * as R from 'ramda'
 
-class Empty { }
+class Empty {
+  constructor() {
+    this[Symbol.iterator] = function* () {}
+  }
+}
+
+function* iterateStack() {
+  yield this.head;
+  yield* this.tail;
+}
 
 class Stack {
   constructor(head, tail) {
@@ -9,6 +18,7 @@ class Stack {
     }
     this.head = head;
     this.tail = tail;
+    this[Symbol.iterator] = iterateStack.bind(this);
   }
 }
 

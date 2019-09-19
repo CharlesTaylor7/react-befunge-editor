@@ -61,4 +61,14 @@ describe('Stack', () => {
         .toThrow()
     })
   })
+  describe('is iterable', () => {
+    test('iterate empty stack yields nothing', () => {
+      expect(Array.from(Stack.empty))
+        .toEqual([])
+    })
+    test('iterate non empty stack', () => {
+      expect(Array.from(Stack.fromArray(['a', 'b'])))
+        .toEqual(['a', 'b'])
+    })
+  })
 })
