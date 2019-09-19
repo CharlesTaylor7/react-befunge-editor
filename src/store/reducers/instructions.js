@@ -42,7 +42,12 @@ export const executeCurrent = (state) => {
       return R.set(R.lensProp('heading'), Random.among('Right', 'Left', 'Up', 'Down'), state);
     case '_':
       const { head, tail } = state.stack;
-      
+      const heading = head ? 'Left' : 'Right';
+      return R.mergeRight(state, { heading, stack: tail });
+    case '|':
+      const { head, tail } = state.stack;
+      const heading = head ? 'Up' : 'Down';
+      return R.mergeRight(state, { heading, stack: tail });
     default:
       return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
