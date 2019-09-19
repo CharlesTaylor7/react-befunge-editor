@@ -15,4 +15,6 @@ export default {
   activeBridge: false,
   executionComplete: false,
   stringMode: false,
+  // false | 'Number' | 'Character'
+  pendingUserInput: false
 };

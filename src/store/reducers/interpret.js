@@ -117,6 +117,10 @@ export default (state) => {
         R.set(gridLens(x, y), String.fromCharCode(value)),
         R.set(R.lensProp('stack'), rest)
       )(state);
+    case '&':
+      return R.set(R.lensProp('pendingUserInput'), 'Number', state);
+    case '~':
+      return R.set(R.lensProp('pendingUserInput'), 'Character', state);
     case '@':
       return R.set(R.lensProp('executionComplete'), true, state);
     case ' ':
