@@ -3,6 +3,7 @@ import * as R from 'ramda'
 class Empty {
   constructor() {
     this[Symbol.iterator] = function* () {}
+    return Object.freeze(this);
   }
 }
 
@@ -19,6 +20,7 @@ class Stack {
     this.head = head;
     this.tail = tail;
     this[Symbol.iterator] = iterateStack.bind(this);
+    return Object.freeze(this);
   }
 }
 

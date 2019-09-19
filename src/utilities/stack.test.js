@@ -71,4 +71,14 @@ describe('Stack', () => {
         .toEqual(['a', 'b'])
     })
   })
+  describe('is immutable', () => {
+    test('empty stack is immutable', () => {
+      expect(() => Stack.empty.foo = "Foo")
+        .toThrow()
+    })
+    test('non empty stack is immutable', () => {
+      expect(() => Stack.fromArray(['a', 'b']).bar = "Bar")
+        .toThrow()
+    })
+  })
 })
