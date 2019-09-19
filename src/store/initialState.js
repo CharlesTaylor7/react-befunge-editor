@@ -11,6 +11,7 @@ export default {
   dimensions: { height: 0, width: 0},
   // stack<int>
   stack: Stack.empty,
+  console: '',
   activeBridge: false,
   executionComplete: false,
   stringMode: false,

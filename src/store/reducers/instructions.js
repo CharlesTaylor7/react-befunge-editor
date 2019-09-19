@@ -80,6 +80,24 @@ export const executeCurrent = (state) => {
         stack => stack.tail,
         state
       );
+    case '.':
+      const { head, tail } = stack;
+      return R.mergeRight(
+        state,
+        {
+          stack: tail,
+          console: stack.console + head + ' ',
+        }
+      );
+    case ',':
+      const { head, tail } = stack;
+      return R.mergeRight(
+        state,
+        {
+          stack: tail,
+          console: stack.console + String.fromCharCode(head),
+        }
+      );
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
   }
