@@ -71,16 +71,5 @@ describe('Stack', () => {
         .toEqual(['a', 'b'])
     })
   })
-  describe('can be deconstructed', () => {
-    test('deconstruct non empty stack', () => {
-      const { head, tail } = Stack.fromArray(['a', 'b'])
-      expect(head).toEqual('a')
-      expect(tail).toEqual(Stack.fromArray(['b']))
-    })
-    test('deconstruct empty stack', () => {
-      const { head, tail } = Stack.empty
-      expect(head).toBe(undefined)
-      expect(tail).toBe(undefined)
-    })
-  })
+  
 })

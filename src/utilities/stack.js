@@ -7,22 +7,21 @@ class Empty {
 }
 
 function* iterateStack() {
-  yield this.head;
-  yield* this.tail;
+  yield this.__head;
+  yield* this.__tail;
 }
 
 const isStack = stack =>
   stack instanceof Empty ||
-  (stack.head !== undefined &&
-    stack.tail !== undefined)
+  stack instanceof Stack;
 
 class Stack {
   constructor(head, tail) {
     if (!isStack(tail)) {
       throw new Error('Tail must be a stack.')
     }
-    this.head = head;
-    this.tail = tail;
+    this.__head = head;
+    this.__tail = tail;
     this[Symbol.iterator] = iterateStack.bind(this);
   }
 }
@@ -40,8 +39,8 @@ const pop = R.curry((num, stack) => {
       result.push(0);
     }
     else {
-      result.push(stack.head);
-      stack = stack.tail;
+      result.push(stack.__head);
+      stack = stack.__tail;
     }
   }
   result.push(stack);
