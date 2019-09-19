@@ -2,9 +2,9 @@ import Stack from './stack'
 
 describe('Stack', () => {
   describe('#empty', () => {
-    test('the empty stack is identical to itself', () => {
+    test('is self identical', () => {
       expect(Stack.empty)
-        .toBe(Stack.empty);
+        .toBe(Stack.empty)
     })
   })
   describe('#isEmpty', () => {
@@ -14,44 +14,51 @@ describe('Stack', () => {
     })
     test('a non empty stack is not empty', () => {
       expect(Stack.isEmpty(Stack.push('a', Stack.empty)))
-        .toBe(false);
+        .toBe(false)
     })
   })
   describe('#fromArray', () => {
-    test('stack from empty array is empty stack', () => {
+    test('from empty array is empty stack', () => {
       expect(Stack.fromArray([]))
         .toBe(Stack.empty)
     })
-
-    test('stack can be built from an array', () => {
+    test('can build from an array', () => {
       expect(Stack.fromArray([1, 2]))
         .toEqual(Stack.push(1, Stack.push(2, Stack.empty)))
     })
   })
   describe('#push', () => {
-    test('push is curried', () => {
+    test('is curried', () => {
       expect(Stack.push(1)(Stack.empty))
         .toEqual(Stack.push(1, Stack.empty))
     })
-    test('push 2nd argument must be a stack', () => {
+    test('2nd argument must be a stack', () => {
       expect(() => Stack.push(1, 1))
         .toThrow()
     })
   })
   describe('#pop', () => {
-    test('pop gets items from the top of the stack', () => {
+    test('is curried', () => {
+      expect(Stack.pop(1)(Stack.fromArray(['a'])))
+        .toEqual(Stack.pop(1, Stack.fromArray(['a'])))
+    })
+    test('can get top of stack', () => {
       expect(Stack.pop(1, Stack.fromArray(['a', 'b', 'c'])))
         .toEqual(['a', Stack.fromArray(['b', 'c'])])
     })
-    test('pop zero returns singleton array', () => {
-      const stack = Stack.fromArray(['a', 'b']);
-      expect(Stack.pop(0, stack))
-        .toEqual([stack]);
-    });
-    test('pop can return many from top of the stack', () => {
-      const stack = Stack.fromArray(['a', 'b', 'c', 'd']);
+    test('can get many from top of stack', () => {
+      const stack = Stack.fromArray(['a', 'b', 'c', 'd'])
       expect(Stack.pop(2, stack))
-        .toEqual(['a', 'b', Stack.fromArray(['c', 'd'])]);
-    });
+        .toEqual(['a', 'b', Stack.fromArray(['c', 'd'])])
+    })
+    test('popping zero returns singleton array', () => {
+      const stack = Stack.fromArray(['a', 'b'])
+      expect(Stack.pop(0, stack))
+        .toEqual([stack])
+    })
+    test('cannot pop more than the depth of the stack', () => {
+      expect(() => Stack.pop(2, Stack.fromArray(['a'])))
+        .toThrow()
+    })
   })
 })
