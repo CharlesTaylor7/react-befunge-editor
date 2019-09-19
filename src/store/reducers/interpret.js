@@ -126,7 +126,6 @@ export default (
     case '@':
       return R.set(R.lensProp('executionComplete'), true, state);
     case ' ':
-    case undefined:
       return state;
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
