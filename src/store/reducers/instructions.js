@@ -98,6 +98,12 @@ export const executeCurrent = (state) => {
           console: stack.console + String.fromCharCode(head),
         }
       );
+    case '#':
+      return R.set(
+        R.lensProp('activeBridge'),
+        true,
+        state
+      );
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
   }
