@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import Stack from '../../utilities/stack'
+import * as Random from '../../utilities/random'
 import { gridLens } from '../lenses'
 import { quot, rem } from '../../utilities/integerDivision'
 
@@ -37,7 +38,11 @@ export const executeCurrent = (state) => {
       return R.set(R.lensProp('heading'), 'Up', state);
     case 'V':
       return R.set(R.lensProp('heading'), 'Down', state);
-    
+    case '?':
+      return R.set(R.lensProp('heading'), Random.among('Right', 'Left', 'Up', 'Down'), state);
+    case '_':
+      const { head, tail } = state.stack;
+      
     default:
       return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
