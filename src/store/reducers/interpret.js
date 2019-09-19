@@ -7,7 +7,7 @@ import { quot, rem } from '../../utilities/integerDivision'
 export default (state) => {
   const instruction = R.view(gridLens(state.currentInstruction), state);
 
-  if (state.stringMode && instruction !== '\"') {
+  if (state.stringMode && instruction !== '"') {
     return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
 
@@ -47,13 +47,15 @@ export default (state) => {
         state
       );
     case '_':
-      const { head, tail } = state.stack;
-      const heading = head ? 'Left' : 'Right';
-      return R.mergeRight(state, { heading, stack: tail });
+      return R.pipe(
+        R.over(R.lensProp('stack'), stack => stack.tail),
+        R.set(R.lensProp('heading'), state.stack.head ? 'Left' : 'Right'),
+      )(state);
     case '|':
-      const { head, tail } = state.stack;
-      const heading = head ? 'Up' : 'Down';
-      return R.mergeRight(state, { heading, stack: tail });
+      return R.pipe(
+        R.over(R.lensProp('stack'), stack => stack.tail),
+        R.set(R.lensProp('heading'), state.stack.head ? 'Up' : 'Down'),
+      )(state);
     case '"':
       return R.over(R.lensProp('stringMode'), mode => !mode, state);
     case ':':
@@ -78,23 +80,21 @@ export default (state) => {
         state
       );
     case '.':
-      const { head, tail } = state.stack;
-      return R.mergeRight(
-        state,
-        {
-          stack: tail,
-          console: state.console + head + ' ',
-        }
-      );
+      return R.pipe(
+        R.over(R.lensProp('stack'), stack => stack.tail),
+        R.set(
+          R.lensProp('console'),
+          console => console + state.stack.head + ' '
+        )
+      )(state);
     case ',':
-      const { head, tail } = state.stack;
-      return R.mergeRight(
-        state,
-        {
-          stack: tail,
-          console: state.console + String.fromCharCode(head),
-        }
-      );
+      return R.pipe(
+        R.over(R.lensProp('stack'), stack => stack.tail),
+        R.set(
+          R.lensProp('console'),
+          console => console + String.fromCharCode(state.stack.head)
+        )
+      )(state);
     case '#':
       return R.set(
         R.lensProp('activeBridge'),
