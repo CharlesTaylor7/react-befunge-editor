@@ -74,7 +74,7 @@ const Cell = ({ position, value, inFocus, isCurrentInstruction, gridDimensions, 
 const mapStateToProps = (state, ownProps) => ({
   value: state.grid[ownProps.id],
   inFocus: R.equals(ownProps.position, state.editorFocus),
-  isCurrentInstruction: R.equals(ownProps.position, state.currentInstruction),
+  isExecuting: R.equals(ownProps.position, state.executionPointer),
   gridDimensions: state.dimensions,
 });
 

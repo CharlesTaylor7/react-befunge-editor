@@ -3,10 +3,12 @@ import Stack from '../../utilities/stack'
 import * as Random from '../../utilities/random'
 import { gridLens } from '../lenses'
 import { quot, rem } from '../../utilities/integerDivision'
+import getCurrentInstruction from '../selectors/getCurrentInstruction'
 
-export default (state) => {
-  const instruction = R.view(gridLens(state.currentInstruction), state);
-
+export default (
+  state,
+  instruction = getCurrentInstruction(state)
+) => {
   if (state.stringMode && instruction !== '"') {
     return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }

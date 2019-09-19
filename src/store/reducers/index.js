@@ -9,7 +9,7 @@ export default (state = initialState, action) => {
   switch(action.type) {
     case "SET_GRID_DIMENSIONS": {
       const { height, width } = action;
-      return R.mergeRight(state, { dimensions: { height, width }})
+      return R.set(R.lensProp('dimensions'), { height, width }, state);
     }
     case "EDIT_CELL": {
       const { position, value} = action;
@@ -20,19 +20,23 @@ export default (state = initialState, action) => {
       const { dimensions: { width, height }} = state;
 
       if (x >= 0 && x < width && y >= 0 && y < height) {
-        return R.mergeRight(state, { editorFocus: action.position });
+        return R.set(R.lensProp('editorFocus'), action.position, state);
       }
       return state;
     }
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;
-      const position = move({
-        jumpSize,
-        direction: state.heading,
-        dimensions: state.dimensions
-      })(state.currentInstruction);
-
-      return R.mergeRight(state, { currentInstruction: position, activeBridge: false});
+      return R.pipe(
+        R.set(R.lensProp('activeBridge'), false),
+        R.over(
+          R.lensProp('executionPointer'),
+          move({
+            jumpSize,
+            direction: state.heading,
+            dimensions: state.dimensions
+          })
+        )
+      )
     }
     case "EXECUTE": {
       return interpret(state);

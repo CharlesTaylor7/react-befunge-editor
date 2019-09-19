@@ -2,7 +2,7 @@ import Stack from '../utilities/stack';
 
 export default {
   editorFocus: { x: 0, y: 0 },
-  currentInstruction: { x: 0, y: 0 },
+  executionPointer: { x: 0, y: 0 },
   // type heading = 'Up' | 'Right' | 'Down' | 'Left'
   heading: 'Right',
   // grid: { [cellId: string]: instruction }
