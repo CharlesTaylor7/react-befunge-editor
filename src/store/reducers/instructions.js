@@ -27,6 +27,17 @@ export const executeCurrent = (state) => {
       return runBinaryOpOnStack((a, b) => rem(b, a))(state);
     case '!':
       return R.over(R.lensPath(['stack', 'head']), x => x === 0 ? 1 : 0, state);
+    case '`':
+      return runBinaryOpOnStack((a, b) => b > a ? 1 : 0)(state);
+    case '>':
+      return R.set(R.lensProp('heading'), 'Right', state);
+    case '<':
+      return R.set(R.lensProp('heading'), 'Left', state);
+    case '^':
+      return R.set(R.lensProp('heading'), 'Up', state);
+    case 'V':
+      return R.set(R.lensProp('heading'), 'Down', state);
+    
     default:
       return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
