@@ -3,7 +3,6 @@ import * as R from 'ramda'
 class Empty {
   constructor() {
     this[Symbol.iterator] = function* () {}
-    return Object.freeze(this);
   }
 }
 
@@ -12,15 +11,19 @@ function* iterateStack() {
   yield* this.tail;
 }
 
+const isStack = stack =>
+  stack instanceof Empty ||
+  (stack.head !== undefined &&
+    stack.tail !== undefined)
+
 class Stack {
   constructor(head, tail) {
-    if (!(tail instanceof Empty || tail instanceof Stack)) {
+    if (!isStack(tail)) {
       throw new Error('Tail must be a stack.')
     }
     this.head = head;
     this.tail = tail;
     this[Symbol.iterator] = iterateStack.bind(this);
-    return Object.freeze(this);
   }
 }
 
