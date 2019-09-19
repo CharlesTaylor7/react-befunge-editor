@@ -6,6 +6,11 @@ import { quot, rem } from '../../utilities/integerDivision'
 
 export const executeCurrent = (state) => {
   const instruction = R.view(gridLens(state.currentInstruction), state);
+
+  if (state.stringMode && instruction !== '\"') {
+    return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
+  }
+
   const number = Number(instruction);
 
   if (Number.isInteger(number)) {
@@ -48,8 +53,10 @@ export const executeCurrent = (state) => {
       const { head, tail } = state.stack;
       const heading = head ? 'Up' : 'Down';
       return R.mergeRight(state, { heading, stack: tail });
+    case '"':
+      return R.over(R.lensProp('stringMode'), mode => !mode, state);
     default:
-      return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
+      throw new Error(`Unrecognized instruction: ${instruction}`);
   }
 }
 
