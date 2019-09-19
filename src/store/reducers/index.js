@@ -26,7 +26,12 @@ export default (state = initialState, action) => {
     }
     case "ADVANCE": {
       const jumpSize = state.activeBridge ? 2 : 1;
-      const position = move(state.heading, jumpSize)(state.currentInstruction);
+      const position = move({
+        jumpSize,
+        direction: state.heading,
+        dimensions: state.dimensions
+      })(state.currentInstruction);
+
       return R.mergeRight(state, { currentInstruction: position, activeBridge: false});
     }
     case "EXECUTE": {

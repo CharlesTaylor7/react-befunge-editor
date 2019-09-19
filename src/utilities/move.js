@@ -6,8 +6,8 @@ const yLens = R.lensProp('y');
 
 // type direction = 'Up' | 'Right' | 'Down' | 'Left'
 // type dimensions = { width: int, height: int }
-
-export default ({ direction, jumpSize, dimensions: { width, height} }) => {
+export default ({ direction, dimensions, jumpSize = 1 }) => {
+  const { width, height } = dimensions;
   switch(direction) {
     case "Right":
       return R.over(xLens, x => (x + jumpSize) % width);

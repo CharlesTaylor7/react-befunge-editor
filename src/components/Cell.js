@@ -28,14 +28,26 @@ const Cell = ({ position, value, inFocus, isCurrentInstruction, gridDimensions, 
   const onKeyDown = key => {
     const direction = R.match(/^Arrow(.*)$/, key)[1];
     if (direction) {
-      dispatch({ type: 'SET_EDITOR_FOCUS', position: move(direction)(position) })
+      dispatch({
+        type: 'SET_EDITOR_FOCUS',
+        position: move({
+          direction,
+          dimensions: gridDimensions,
+        })(position),
+      })
     } else if (
       key === 'Backspace' &&
       ( value === '' ||
         value === null ||
         value === undefined)
       ) {
-      dispatch({ type: 'SET_EDITOR_FOCUS', position: move('Left')(position)});
+      dispatch({
+        type: 'SET_EDITOR_FOCUS',
+        position: move({
+          direction: 'Left',
+          dimensions: gridDimensions,
+        })(position),
+      });
     }
   }
 
