@@ -9,9 +9,11 @@ export const quotRem = (dividend, divisor) => {
 
 export const divMod = (dividend, divisor) => {
   const { quot, rem } = quotRem(dividend, divisor);
-  return Math.sign(rem) === -(Math.sign(dividend))
-    ? { div: quot - 1, mod: rem + divisor }
-    : { div: quot, mod: rem }
+  if (Math.sign(rem) === -(Math.sign(divisor))) {
+    return { div: quot - 1, mod: rem + divisor };
+  } else {
+    return { div: quot, mod: rem };
+  }
 }
 
 export const rem = (dividend, divisor) => quotRem(dividend, divisor).rem;
