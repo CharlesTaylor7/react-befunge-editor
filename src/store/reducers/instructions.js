@@ -55,6 +55,8 @@ export const executeCurrent = (state) => {
       return R.mergeRight(state, { heading, stack: tail });
     case '"':
       return R.over(R.lensProp('stringMode'), mode => !mode, state);
+    case ':':
+      return R.over(R.lensProp('stack'), stack => Stack.push(stack.head, stack), state);
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
   }
