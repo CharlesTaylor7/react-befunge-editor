@@ -25,6 +25,8 @@ export const executeCurrent = (state) => {
       return runBinaryOpOnStack((a, b) => quot(b, a))(state);
     case '%':
       return runBinaryOpOnStack((a, b) => rem(b, a))(state);
+    case '!':
+      return R.over(R.lensPath(['stack', 'head']), x => x === 0 ? 1 : 0, state);
     default:
       return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
