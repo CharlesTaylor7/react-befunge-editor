@@ -44,7 +44,11 @@ export const executeCurrent = (state) => {
     case 'V':
       return R.set(R.lensProp('heading'), 'Down', state);
     case '?':
-      return R.set(R.lensProp('heading'), Random.among('Right', 'Left', 'Up', 'Down'), state);
+      return R.set(
+        R.lensProp('heading'),
+        Random.among('Right', 'Left', 'Up', 'Down'),
+        state
+      );
     case '_':
       const { head, tail } = state.stack;
       const heading = head ? 'Left' : 'Right';
@@ -56,7 +60,26 @@ export const executeCurrent = (state) => {
     case '"':
       return R.over(R.lensProp('stringMode'), mode => !mode, state);
     case ':':
-      return R.over(R.lensProp('stack'), stack => Stack.push(stack.head, stack), state);
+      return R.over(
+        R.lensProp('stack'),
+        stack => Stack.push(stack.head, stack),
+        state
+      );
+    case '\\':
+      return R.over(
+        R.lensProp('stack'),
+        stack => {
+          const [ a, b, rest ] = Stack.pop(2, stack);
+          return Stack.push(b, Stack.push(a, rest));
+        },
+        state
+      );
+    case '$':
+      return R.set(
+        R.lensProp('stack'),
+        stack => stack.tail,
+        state
+      );
     default:
       throw new Error(`Unrecognized instruction: ${instruction}`);
   }
