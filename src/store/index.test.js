@@ -1,6 +1,7 @@
 import newStore from '../store'
 import executeAndAdvance from './actions/executeAndAdvance'
 import * as R from 'ramda'
+import wu from 'wu'
 
 const init = program => {
   const lines = R.split('\n');
@@ -20,18 +21,29 @@ const init = program => {
   return { grid, dimensions };
 }
 
-const runProgram = (program) => {
+function* run (program) {
   const store = newStore(init(program));
 
-  while (!store.getState().executionComplete) {
+  let state = store.getState();
+  yield state;
+
+  while (!state.executionComplete) {
     executeAndAdvance(store.dispatch);
+    state = store.getState();
+    yield state;
   }
-  return store.getState();
+}
+
+const completesIn = (n, generator) => {
+  const nth = wu.drop(n, generator);
+  return nth.next();
 }
 
 describe('interpreter', () => {
   test('Hello, World!', () => {
-    expect(runProgram('"!dlroW ,olleH",,,,,,,,,,,,,@'))
+    const program = '"!dlroW ,olleH",,,,,,,,,,,,,@';
+    const completion = completesIn(13, run(program));
+    expect(completion)
       .toMatchObject({ console: "Hello, World!" })
   })
 })
