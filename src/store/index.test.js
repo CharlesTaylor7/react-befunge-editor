@@ -2,6 +2,7 @@ import newStore from '../store'
 import executeAndAdvance from './actions/executeAndAdvance'
 import * as R from 'ramda'
 import wu from 'wu'
+import Stack from '../utilities/stack'
 
 const init = program => {
   const lines = R.split('\n', program);
@@ -39,14 +40,19 @@ function* run (program) {
 
 const completesIn = (n, generator) => {
   const nth = wu.drop(n, generator);
-  return nth.next();
+  return nth.next().value;
 }
 
 describe('interpreter', () => {
   test('Hello, World!', () => {
     const program = '"!dlroW ,olleH",,,,,,,,,,,,,@';
-    const completion = completesIn(13, run(program));
+    const completion = completesIn(29, run(program));
     expect(completion)
-      .toMatchObject({ console: "Hello, World!" })
+      .toMatchObject({
+        console: "Hello, World!",
+        executionComplete: true,
+        stringMode: false,
+        stack: Stack.empty,
+      })
   })
 })

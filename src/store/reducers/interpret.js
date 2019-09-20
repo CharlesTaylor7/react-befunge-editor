@@ -18,7 +18,6 @@ export default (
   if (state.stringMode && instruction !== '"') {
     return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
-
   const charCode = instruction.charCodeAt(0);
   const number = charCode - '0'.charCodeAt(0);
 
@@ -91,7 +90,7 @@ export default (
     case '.':
       return R.pipe(
         R.over(R.lensProp('stack'), stack => stack.tail),
-        R.set(
+        R.over(
           R.lensProp('console'),
           console => console + state.stack.head + ' '
         )
@@ -99,7 +98,7 @@ export default (
     case ',':
       return R.pipe(
         R.over(R.lensProp('stack'), stack => stack.tail),
-        R.set(
+        R.over(
           R.lensProp('console'),
           console => console + String.fromCharCode(state.stack.head)
         )

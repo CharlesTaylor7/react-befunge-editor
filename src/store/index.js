@@ -5,9 +5,12 @@ import rootReducer from './reducers';
 import defaultState from './defaultState';
 
 const logger = store => next => action => {
+  const oldState = store.getState();
   console.log('dispatching', action)
   let result = next(action)
-  console.log('next state', store.getState())
+  let state = store.getState();
+  console.log('next state', state)
+
   return result
 }
 
@@ -16,5 +19,5 @@ export default (initialState) => createStore(
   R.mergeRight(
     R.mergeRight(defaultState, initialState),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()),
-  applyMiddleware(logger)
+  // applyMiddleware(logger)
 );
