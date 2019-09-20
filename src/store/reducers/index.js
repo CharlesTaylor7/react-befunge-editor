@@ -1,10 +1,9 @@
 import * as R from 'ramda'
 import interpret from './interpret';
 import move from '../../utilities/move';
-import initialState from '../initialState';
 import { gridLens } from '../lenses';
 
-export default (state = initialState, action) => {
+export default (state, action) => {
 
   switch(action.type) {
     case "SET_GRID_DIMENSIONS": {
