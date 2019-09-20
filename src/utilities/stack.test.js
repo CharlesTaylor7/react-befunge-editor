@@ -81,4 +81,16 @@ describe('Stack', () => {
         .toThrow()
     })
   })
+  describe('can be destructured', () => {
+    test('non empty stack yields head & tail', () => {
+      const { head, tail } = Stack.fromArray(['a', 'b'])
+      expect(head).toBe('a')
+      expect(tail).toEqual(Stack.fromArray(['b']))
+    })
+    test('empty stack destructures as zero and empty stack', () => {
+      const { head, tail } = Stack.empty;
+      expect(head).toBe(0)
+      expect(tail).toBe(Stack.empty);
+    })
+  })
 })

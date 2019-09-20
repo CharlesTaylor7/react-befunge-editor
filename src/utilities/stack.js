@@ -2,14 +2,16 @@ import * as R from 'ramda'
 
 class Empty {
   constructor() {
+    this.head = 0;
+    this.tail = this;
     this[Symbol.iterator] = function* () {}
     return Object.freeze(this);
   }
 }
 
 function* iterateStack() {
-  yield this.__head;
-  yield* this.__tail;
+  yield this.head;
+  yield* this.tail;
 }
 
 const isStack = stack =>
@@ -23,8 +25,8 @@ class Stack {
     if (!isStack(tail)) {
       throw new Error('Tail must be a stack.')
     }
-    this.__head = head;
-    this.__tail = tail;
+    this.head = head;
+    this.tail = tail;
     this[Symbol.iterator] = iterateStack.bind(this);
     return Object.freeze(this);
   }
@@ -39,13 +41,8 @@ const push = R.curry((head, tail) => new Stack(head, tail));
 const pop = R.curry((num, stack) => {
   const result = [];
   for (let i = 0; i < num; i++) {
-    if (isEmpty(stack)) {
-      result.push(0);
-    }
-    else {
-      result.push(stack.__head);
-      stack = stack.__tail;
-    }
+    result.push(stack.head);
+    stack = stack.tail;
   }
   result.push(stack);
   return result;
