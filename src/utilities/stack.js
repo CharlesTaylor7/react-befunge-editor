@@ -55,11 +55,15 @@ function* reverse(array) {
   }
 }
 
-const fromArray = array =>
-  R.pipe(
-    reverse,
-    wu.reduce((stack, elem) => push(elem, stack), empty)
-  )(array);
+const fromArray = R.pipe(
+  reverse,
+  wu.reduce((stack, elem) => push(elem, stack), empty)
+);
+
+const fromString = R.pipe(
+  reverse,
+  wu.reduce((stack, char) => push(char.charCodeAt(0), stack), empty)
+);
 
 export default {
   empty,
@@ -67,4 +71,5 @@ export default {
   push,
   pop,
   fromArray,
+  fromString,
 }

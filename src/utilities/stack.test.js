@@ -61,6 +61,16 @@ describe('Stack', () => {
         .toEqual(['a', 0, Stack.empty])
     })
   })
+  describe('#fromString', () => {
+    test('from empty string is empty stack', () => {
+      expect(Stack.fromString(''))
+        .toBe(Stack.empty)
+    })
+    test('builds stack via character codes of string', () => {
+      expect(Stack.fromString('\t 9'))
+        .toEqual(Stack.fromArray([9, 32, 57]))
+    })
+  })
   describe('is iterable', () => {
     test('iterate empty stack yields nothing', () => {
       expect(Array.from(Stack.empty))

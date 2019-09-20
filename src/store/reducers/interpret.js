@@ -15,6 +15,7 @@ export default (
   if (instruction.length !== 1) {
     throw new Error("Instruction should be a single character.")
   }
+
   if (state.stringMode && instruction !== '"') {
     return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }

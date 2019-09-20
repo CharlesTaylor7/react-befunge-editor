@@ -25,7 +25,6 @@ function* run (program) {
   const store = newStore(init(program));
 
   let state = store.getState();
-  yield state;
 
   while (!state.executionComplete) {
     executeAndAdvance(store.dispatch);
@@ -35,16 +34,14 @@ function* run (program) {
 }
 
 const completesIn = (n, generator) => {
-  const nth = wu.drop(n, generator);
-  const { value } = nth.next();
-
-  if (!nth.next().done) {
-    throw new Error(`Program did not complete in ${n} steps.`)
+  let value;
+  for(let i = 0; i < n + 1; i++) {
+    const next = generator.next();
+    if (next.done) return value;
+    value = next.value;
   }
-
-  return value;
+  throw new Error(`Iterable did not complete in ${n} or less steps.`)
 }
-
 
 describe('interpreter', () => {
   test('Hello, World!', () => {
@@ -65,9 +62,9 @@ describe('interpreter', () => {
       '^<',
     ];
     expect(() => completesIn(1000, run(program)))
-      .toThrow('Program did not complete in 1000 steps.')
+      .toThrow('Iterable did not complete in 1000 or less steps.')
   })
-  test.only('Infinite loop w/ unbounded stack growth', () => {
+  test('Infinite loop w/ unbounded stack growth', () => {
     const program = [
       '>1V',
       '4 2',
@@ -86,5 +83,22 @@ describe('interpreter', () => {
         Stack.fromArray([4, 3, 2, 1]),
         Stack.fromArray([4, 3, 2, 1, 4, 3, 2, 1]),
       ])
+  })
+  test('A self modifying program', () => {
+    const program = [
+      '930pV',
+      '   @ ',
+      '   , ',
+      '   " ',
+      '   ^<',
+    ];
+    expect(completesIn(100, run(program)))
+      .toMatchObject({
+        console: '^',
+        stack: Stack.fromString('\t@,'),
+        grid: {
+          '3-0': '\t',
+        }
+      })
   })
 })
