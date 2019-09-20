@@ -18,6 +18,16 @@ describe('interpret', () => {
     expect(() => interpret({}, ''))
       .toThrow("Instruction should be a single character")
   })
+  it('throws for capital V', () => {
+    expect(() => interpret({}, 'V'))
+      .toThrow("Unrecognized instruction: 'V'")
+  })
+  it('sets heading downward for lowercase v', () => {
+    expect(interpret({}, 'v'))
+      .toMatchObject({
+        heading: 'Down',
+      })
+  })
   it('does nothing with space', () => {
     const state = { };
     expect(interpret(state, ' '))
