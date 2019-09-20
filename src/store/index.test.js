@@ -124,21 +124,31 @@ describe('interpreter', () => {
   test.only('A factorial program', () => {
     const program = [
       '&>:1-:v v *_$.@',
-      ' ^    _$>\:^',
+      ' ^    _$>\\:^',
     ];
-
+    // expect(completesIn(1000, run(program, [0].values())))
+    // .toMatchObject({
+    //   console: '1 ',
+    // })
+    expect(completesIn(1000, run(program, [1].values())))
+    .toMatchObject({
+      console: '1 ',
+    })
     expect(completesIn(1000, run(program, [2].values())))
       .toMatchObject({
-        console: '2',
+        console: '2 ',
       })
-
     expect(completesIn(1000, run(program, [3].values())))
       .toMatchObject({
-        console: '6',
+        console: '6 ',
       })
     expect(completesIn(1000, run(program, [4].values())))
       .toMatchObject({
-        console: '24',
+        console: '24 ',
+      })
+      expect(completesIn(1000, run(program, [5].values())))
+      .toMatchObject({
+        console: '120 ',
       })
   })
 })
