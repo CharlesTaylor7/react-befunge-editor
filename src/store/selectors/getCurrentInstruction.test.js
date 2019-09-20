@@ -9,7 +9,17 @@ describe('getCurrentInstruction', () => {
       .toBe('a');
   })
   it('treats missing input as space', () => {
-    expect(getCurrentInstruction({ grid: {}, executionPointer: { x: 2, y: 3 } }))
+    expect(getCurrentInstruction({
+      grid: {},
+      executionPointer: { x: 2, y: 3 }
+    }))
+      .toBe(' ');
+  })
+  it('treats empty input as space', () => {
+    expect(getCurrentInstruction({
+      grid: { '2-3': '' },
+      executionPointer: { x: 2, y: 3 }
+    }))
       .toBe(' ');
   })
 })

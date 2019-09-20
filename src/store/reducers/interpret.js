@@ -9,6 +9,12 @@ export default (
   state,
   instruction = getCurrentInstruction(state)
 ) => {
+  if (typeof instruction !== 'string') {
+    throw new Error("Instruction is not a string.");
+  }
+  if (instruction.length !== 1) {
+    throw new Error("Instruction should be a single character.")
+  }
   if (state.stringMode && instruction !== '"') {
     return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
@@ -129,7 +135,7 @@ export default (
     case ' ':
       return state;
     default:
-      throw new Error(`Unrecognized instruction: ${instruction}`);
+      throw new Error(`Unrecognized instruction: '${instruction}'.`);
   }
 }
 
