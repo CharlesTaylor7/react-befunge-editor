@@ -13,9 +13,10 @@ export default (
     return R.over(R.lensProp('stack'), Stack.push(instruction.charCodeAt(0)), state);
   }
 
-  const number = Number(instruction);
+  const charCode = instruction.charCodeAt(0);
+  const number = charCode - '0'.charCodeAt(0);
 
-  if (Number.isInteger(number)) {
+  if (number >= 0 && number < 10) {
     return R.over(R.lensProp('stack'), Stack.push(number), state);
   }
 

@@ -13,8 +13,10 @@ function* iterateStack() {
 }
 
 const isStack = stack =>
-  stack instanceof Empty ||
-  stack instanceof Stack;
+  R.any(
+    constructor => constructor === stack.constructor.name,
+    [Empty.name, Stack.name]
+  );
 
 class Stack {
   constructor(head, tail) {
@@ -30,7 +32,7 @@ class Stack {
 
 const empty = new Empty();
 
-const isEmpty = stack => stack instanceof Empty;
+const isEmpty = stack => stack.constructor.name === Empty.name;
 
 const push = R.curry((head, tail) => new Stack(head, tail));
 
