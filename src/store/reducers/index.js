@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import interpret from './interpret';
+import execute from './execute';
 import move from '../../utilities/move';
 import { gridLens } from '../lenses';
 import Stack from '../../utilities/stack';
@@ -39,7 +39,7 @@ export default (state, action) => {
       )(state);
     }
     case "EXECUTE": {
-      return interpret(state);
+      return execute(state);
     }
     case "PUSH_INPUT": {
       const { input } = action;
