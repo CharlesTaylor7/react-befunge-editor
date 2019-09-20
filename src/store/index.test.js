@@ -7,10 +7,7 @@ import Stack from '../utilities/stack'
 // type program: string[]
 const init = program => {
   const height = program.length;
-  const width = height === 1
-    ? program[0].length
-    : R.reduce(R.maxBy(line => line.length), 0, program);
-
+  const width = program.reduce(R.maxBy(line => line.length)).length;
   const dimensions = { height, width };
 
   const grid = { };
@@ -48,6 +45,7 @@ const completesIn = (n, generator) => {
   return value;
 }
 
+
 describe('interpreter', () => {
   test('Hello, World!', () => {
     const program = [
@@ -61,7 +59,6 @@ describe('interpreter', () => {
         stack: Stack.empty,
       })
   })
-
   test('Infinite loop', () => {
     const program = [
       '>V',
@@ -69,5 +66,25 @@ describe('interpreter', () => {
     ];
     expect(() => completesIn(1000, run(program)))
       .toThrow('Program did not complete in 1000 steps.')
+  })
+  test.only('Infinite loop w/ unbounded stack growth', () => {
+    const program = [
+      '>1V',
+      '4 2',
+      '^3<',
+    ];
+    const stackSnapshots = wu(run(program))
+      .map(state => state.stack)
+      .enumerate()
+      .filter(([_, index]) => index % 8 === 0)
+      .take(3)
+      .map(pair => pair[0])
+      .toArray();
+    expect(stackSnapshots)
+      .toEqual([
+        Stack.empty,
+        Stack.fromArray([4, 3, 2, 1]),
+        Stack.fromArray([4, 3, 2, 1, 4, 3, 2, 1]),
+      ])
   })
 })
