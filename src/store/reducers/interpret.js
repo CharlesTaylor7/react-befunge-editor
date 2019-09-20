@@ -83,7 +83,7 @@ export default (
         state
       );
     case '$':
-      return R.set(
+      return R.over(
         R.lensProp('stack'),
         stack => stack.tail,
         state

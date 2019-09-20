@@ -10,7 +10,9 @@ const logger = store => next => action => {
   let result = next(action)
   let state = store.getState();
   console.log('next state', state)
-
+  if (typeof state.stack === 'function') {
+    console.log("foo")
+  }
   return result
 }
 

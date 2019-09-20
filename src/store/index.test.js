@@ -121,7 +121,7 @@ describe('interpreter', () => {
         console: program[0],
       })
   })
-  test('factorial', () => {
+  test.only('A factorial program', () => {
     const program = [
       '&>:1-:v v *_$.@',
       ' ^    _$>\:^',
