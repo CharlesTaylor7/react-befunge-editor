@@ -40,7 +40,13 @@ function* run (program) {
 
 const completesIn = (n, generator) => {
   const nth = wu.drop(n, generator);
-  return nth.next().value;
+  const { value } = nth.next();
+
+  if (!nth.next().done) {
+    throw new Error(`Program did not complete in ${n} steps.`)
+  }
+
+  return value;
 }
 
 describe('interpreter', () => {
