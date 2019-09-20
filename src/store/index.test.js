@@ -101,4 +101,13 @@ describe('interpreter', () => {
         }
       })
   })
+  test('A quine', () => {
+    const program = [
+      '01->1# +# :# 0# g# ,# :# 5# 8# *# 4# +# -# _@',
+    ];
+    expect(completesIn(2500, run(program)))
+      .toMatchObject({
+        console: program[0],
+      })
+  })
 })
