@@ -4,19 +4,18 @@ import * as R from 'ramda'
 import wu from 'wu'
 import Stack from '../utilities/stack'
 
+// type program: string[]
 const init = program => {
-  const lines = R.split('\n', program);
-
-  const height = lines.length;
+  const height = program.length;
   const width = height === 1
-    ? lines[0].length
-    : R.reduce(R.maxBy(line => line.length), 0, lines);
+    ? program[0].length
+    : R.reduce(R.maxBy(line => line.length), 0, program);
 
   const dimensions = { height, width };
 
   const grid = { };
   for (let j = 0; j < height; j++) {
-    const line = lines[j];
+    const line = program[j];
     for (let i = 0; i < width; i++) {
       grid[`${i}-${j}`] = line[i];
     }
@@ -51,14 +50,24 @@ const completesIn = (n, generator) => {
 
 describe('interpreter', () => {
   test('Hello, World!', () => {
-    const program = '"!dlroW ,olleH",,,,,,,,,,,,,@';
-    const completion = completesIn(29, run(program));
-    expect(completion)
+    const program = [
+      '"!dlroW ,olleH",,,,,,,,,,,,,@'
+    ];
+    expect(completesIn(29, run(program)))
       .toMatchObject({
         console: "Hello, World!",
         executionComplete: true,
         stringMode: false,
         stack: Stack.empty,
       })
+  })
+
+  test('Infinite loop', () => {
+    const program = [
+      '>V',
+      '^<',
+    ];
+    expect(() => completesIn(1000, run(program)))
+      .toThrow('Program did not complete in 1000 steps.')
   })
 })
