@@ -35,7 +35,7 @@ export default (state, action) => {
             dimensions: state.dimensions
           })
         )
-      )
+      )(state);
     }
     case "EXECUTE": {
       return interpret(state);

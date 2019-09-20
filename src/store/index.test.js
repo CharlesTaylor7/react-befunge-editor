@@ -4,10 +4,13 @@ import * as R from 'ramda'
 import wu from 'wu'
 
 const init = program => {
-  const lines = R.split('\n');
+  const lines = R.split('\n', program);
 
   const height = lines.length;
-  const width = R.max(line => line.length, lines);
+  const width = height === 1
+    ? lines[0].length
+    : R.reduce(R.maxBy(line => line.length), 0, lines);
+
   const dimensions = { height, width };
 
   const grid = { };
