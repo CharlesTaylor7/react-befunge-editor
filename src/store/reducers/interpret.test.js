@@ -12,8 +12,8 @@ describe('interpret', () => {
       .toBe(state)
   })
   it('pushes digits onto the stack', () => {
-    const state = { stack: Stack.empty };
-    expect(interpret(state, '1'))
-      .toEqual({ stack: Stack.push(1, Stack.empty) })
+    const newState = interpret({ stack: Stack.empty }, '1')
+    expect(Array.from(newState.stack))
+      .toEqual([1])
   })
 })
