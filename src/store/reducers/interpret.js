@@ -115,7 +115,7 @@ export default (
         R.lensProp('stack'),
         stack => {
           const [ y, x, rest ] = Stack.pop(2, stack);
-          const value = R.view(gridLens(x, y), state);
+          const value = R.view(gridLens({x, y}), state);
           return Stack.push(value.charCodeAt(0), rest);
         },
         state
@@ -123,7 +123,7 @@ export default (
     case 'p':
       const [ y, x, value, rest ] = Stack.pop(3, state.stack);
       return R.pipe(
-        R.set(gridLens(x, y), String.fromCharCode(value)),
+        R.set(gridLens({x, y}), String.fromCharCode(value)),
         R.set(R.lensProp('stack'), rest)
       )(state);
     case '&':
