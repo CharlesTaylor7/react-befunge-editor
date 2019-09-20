@@ -1,4 +1,5 @@
 import * as R from 'ramda'
+import wu from 'wu'
 
 class Empty {
   constructor() {
@@ -48,12 +49,17 @@ const pop = R.curry((num, stack) => {
   return result;
 });
 
+function* reverse(array) {
+  for(let i = array.length - 1; i > -1; i--) {
+    yield array[i];
+  }
+}
+
 const fromArray = array =>
-  R.reduce(
-    (stack, elem) => push(elem, stack),
-    empty,
-    R.reverse(array)
-  );
+  R.pipe(
+    reverse,
+    wu.reduce((stack, elem) => push(elem, stack), empty)
+  )(array);
 
 export default {
   empty,
