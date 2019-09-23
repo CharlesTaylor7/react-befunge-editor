@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import './Cell.css'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import move from '../utilities/move'
+import move from '../../utilities/move'
 
 const Cell = ({
   position,

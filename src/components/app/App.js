@@ -1,8 +1,9 @@
 import React from 'react';
-import './App.css';
-import Grid from './Grid';
-import Foward from '../store/actions/executeAndAdvance'
 import { connect } from 'react-redux'
+
+import Grid from '../grid/Grid';
+import Foward from '../../store/actions/executeAndAdvance'
+import './App.css';
 
 const App = ({ dispatch }) => (
   <div className="app">
